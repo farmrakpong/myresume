@@ -2,7 +2,7 @@
 
 An online resume built as a single-page product site: Apple-style sections, scroll reveals, dark/light section palettes, and a print stylesheet so the same page exports cleanly to PDF.
 
-🔗 **Live:** _add your deployment URL here_
+🔗 **Live:** https://farmrakpong.github.io/myresume/
 
 ---
 
@@ -72,6 +72,23 @@ src/
 3. Replace `src/app/favicon.ico`.
 
 Page metadata (title and description) is generated from `profile`, so it updates itself.
+
+## Deploy
+
+The site is a **static export** (`output: "export"`) published to **GitHub Pages** by [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). Every push to `main` rebuilds and redeploys it — no server required.
+
+To set this up on a fork:
+
+1. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
+2. Push to `main`. The workflow reads the site path from `actions/configure-pages` and hands it to the build as `NEXT_PUBLIC_BASE_PATH`, so a project page such as `/myresume` gets the correct asset prefix automatically.
+
+Build the same export locally:
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/myresume npm run build   # output lands in ./out
+```
+
+Since the export is fully static, anything that needs a Node server (Route Handlers, Server Actions, ISR, image optimization) is intentionally unused.
 
 ## Contact
 
