@@ -163,6 +163,8 @@ export const languages = [
 ];
 
 export const additional = [
+  { label: "Phone", value: profile.phone },
+  { label: "Email", value: profile.email },
   { label: "Typing speed", value: "Thai 45 WPM · English 60 WPM" },
   { label: "Nationality", value: "Thai" },
   { label: "Date of birth", value: "20 December 1995" },
