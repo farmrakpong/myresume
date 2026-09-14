@@ -1,26 +1,282 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------
+   Apple-style product page tokens
+   Sections opt into a palette via .sec-dark / .sec-light,
+   so the same utilities (text-fg, text-muted, bg-bg) work in both.
+---------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --fg: #f5f5f7;
+  --muted: #86868b;
+  --bg: #000000;
+  --line: rgba(255, 255, 255, 0.14);
+  --card: rgba(255, 255, 255, 0.05);
+  --accent: #0071e3;
+  --gold: #e3a951;
+  --nav-h: 52px;
+}
+
+.sec-dark {
+  --fg: #f5f5f7;
+  --muted: #86868b;
+  --bg: #000000;
+  --line: rgba(255, 255, 255, 0.14);
+  --card: rgba(255, 255, 255, 0.05);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.sec-light {
+  --fg: #1d1d1f;
+  --muted: #6e6e73;
+  --bg: #f5f5f7;
+  --line: rgba(0, 0, 0, 0.11);
+  --card: #ffffff;
+  background: var(--bg);
+  color: var(--fg);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-bg: var(--bg);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --color-accent: var(--accent);
+  --color-gold: var(--gold);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-h);
+  background: #000;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: #000;
+  color: var(--fg);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    var(--font-inter), "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Type scale ---- */
+.t-hero {
+  font-size: clamp(3.1rem, 11.5vw, 8rem);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.t-head {
+  font-size: clamp(2.1rem, 6.2vw, 4.5rem);
+  line-height: 1.06;
+  font-weight: 600;
+  letter-spacing: -0.028em;
+}
+
+.t-sub {
+  font-size: clamp(1.35rem, 3.4vw, 2.4rem);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.t-eyebrow {
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gold);
+}
+
+.t-stat {
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.t-body {
+  font-size: clamp(1rem, 1.4vw, 1.0625rem);
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+}
+
+/* ---- Chrome / metallic headline, like the Pro lettering ---- */
+.chrome {
+  background: linear-gradient(
+    177deg,
+    #ffffff 4%,
+    #c9ccd2 22%,
+    #8d919a 38%,
+    #f4f5f7 52%,
+    #a7abb3 68%,
+    #6f747d 82%,
+    #e9eaee 96%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Scroll reveal ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.85s cubic-bezier(0.28, 0.11, 0.32, 1),
+    transform 0.85s cubic-bezier(0.28, 0.11, 0.32, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Horizontal snap gallery ---- */
+.rail {
+  /* Lines the first card up with the max-w-5xl (64rem) content column above it.
+     Both paddings derive from 100vw so the snap target matches the visual edge. */
+  --rail-pad: max(1.25rem, calc((100vw - 64rem) / 2 + 1.25rem));
+  padding-inline: var(--rail-pad);
+  scroll-padding-inline: var(--rail-pad);
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+  user-select: none;
+}
+
+.rail:active {
+  cursor: grabbing;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail > * {
+  scroll-snap-align: start;
+}
+
+/* ---------------------------------------------------------------
+   Print / Save as PDF — collapse the product page into a clean,
+   black-on-white A4 resume.
+---------------------------------------------------------------- */
+@page {
+  size: A4;
+  margin: 13mm 14mm;
+}
+
+@media print {
+  html,
+  body,
+  .sec-dark,
+  .sec-light {
+    background: #fff !important;
+    color: #000 !important;
+    --fg: #000000;
+    --muted: #333333;
+    --bg: #ffffff;
+    --line: #cfcfcf;
+    --card: #ffffff;
+    --accent: #0f5c8c;
+    --gold: #0f5c8c;
+  }
+
+  body {
+    font-size: 10pt;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-plain {
+    background: none !important;
+    box-shadow: none !important;
+    border-color: #cfcfcf !important;
+    backdrop-filter: none !important;
+  }
+
+  .chrome {
+    background: none !important;
+    -webkit-text-fill-color: #000 !important;
+    color: #000 !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Collapse the oversized editorial type to document sizes */
+  .t-hero {
+    font-size: 24pt !important;
+    letter-spacing: -0.02em;
+  }
+  .t-head {
+    font-size: 13pt !important;
+  }
+  .t-sub {
+    font-size: 11pt !important;
+  }
+  .t-eyebrow {
+    font-size: 8.5pt !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .t-stat {
+    font-size: 16pt !important;
+  }
+  .t-body {
+    font-size: 10pt !important;
+  }
+
+  section {
+    padding: 0 0 10pt !important;
+    min-height: 0 !important;
+  }
+
+  .rail {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 8pt;
+    overflow: visible !important;
+    padding-inline: 0 !important;
+    cursor: auto !important;
+  }
+
+  .rail > * {
+    width: auto !important;
+    min-width: 0 !important;
+  }
+
+  .avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
