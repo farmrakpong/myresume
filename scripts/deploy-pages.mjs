@@ -27,7 +27,9 @@ const owner = remote.replace(/\.git$/, "").split("/").at(-2);
 const basePath = repo.toLowerCase() === `${owner.toLowerCase()}.github.io` ? "" : `/${repo}`;
 
 console.log(`\n▲ Building static export for https://${owner}.github.io${basePath}/\n`);
-run(process.platform === "win32" ? "npm.cmd" : "npm", ["run", "build"], {
+// Call Next through Node rather than `npm run build`: spawning npm.cmd without a
+// shell fails on Windows, and spawning it with one is its own problem.
+run(process.execPath, [join("node_modules", "next", "dist", "bin", "next"), "build"], {
   env: { ...process.env, NEXT_PUBLIC_BASE_PATH: basePath },
 });
 
