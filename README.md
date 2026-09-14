@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rakpong Nagosa — Resume
+
+An online resume built as a single-page product site: Apple-style sections, scroll reveals, dark/light section palettes, and a print stylesheet so the same page exports cleanly to PDF.
+
+🔗 **Live:** _add your deployment URL here_
+
+---
+
+## Highlights
+
+- **Single source of truth** — every piece of content lives in [`src/data/resume.ts`](src/data/resume.ts). Update the data, the whole page follows.
+- **Print-ready** — the "Save as PDF" button calls the browser's print dialog, and a dedicated `@media print` layer flattens effects, hides chrome, and keeps cards from breaking across pages.
+- **Motion that stays out of the way** — `Reveal` fades sections in on scroll via `IntersectionObserver`; `DragRail` gives the project cards drag-to-scroll with arrow controls and native touch panning.
+- **Responsive and accessible** — semantic sections, keyboard-reachable navigation, `aria-hidden` on decorative layers.
+- **Fast by default** — React Server Components everywhere except the few pieces that genuinely need the client.
+
+## Tech Stack
+
+| Layer | Tools |
+| --- | --- |
+| Framework | Next.js 16 (App Router), React 19 |
+| Language | TypeScript |
+| Styling | Tailwind CSS 4, CSS custom properties |
+| Fonts | `next/font` — Inter |
+| Tooling | ESLint (`eslint-config-next`) |
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Other scripts:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # production build
+npm run start   # serve the production build
+npm run lint    # eslint
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├─ app/
+│  ├─ layout.tsx      # fonts, metadata (pulled from the resume data)
+│  ├─ page.tsx        # section order for the whole page
+│  └─ globals.css     # design tokens, section palettes, print rules
+├─ components/
+│  ├─ Nav.tsx         # sticky navigation
+│  ├─ Hero.tsx        # name, headline, contact details
+│  ├─ Overview.tsx    # professional summary
+│  ├─ Experience.tsx  # work history
+│  ├─ Skills.tsx      # skill groups
+│  ├─ Projects.tsx    # project cards inside a DragRail
+│  ├─ Specs.tsx       # job preferences
+│  ├─ Contact.tsx     # call to action
+│  ├─ ActionBar.tsx   # floating bar: Save as PDF / Get in touch
+│  ├─ DragRail.tsx    # horizontal drag-scroll rail
+│  └─ Reveal.tsx      # scroll-triggered reveal wrapper
+└─ data/
+   └─ resume.ts       # ← all content lives here
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Make It Yours
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Edit `src/data/resume.ts` — `profile`, `preferences`, `skillGroups`, `experience`, `projects`.
+2. Tweak the palette in `src/app/globals.css` (`--accent`, `--gold`, and the `.sec-dark` / `.sec-light` tokens).
+3. Replace `src/app/favicon.ico`.
 
-## Deploy on Vercel
+Page metadata (title and description) is generated from `profile`, so it updates itself.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contact
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Rakpong Nagosa** — Backend / Full Stack / Lead Developer
+📧 Farmrakpong0@gmail.com · 📍 Samut Prakan, Thailand
