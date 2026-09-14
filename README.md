@@ -76,4 +76,6 @@ Page metadata (title and description) is generated from `profile`, so it updates
 ## Contact
 
 **Rakpong Nagosa** — Backend / Full Stack / Lead Developer
-📧 Farmrakpong0@gmail.com · 📍 Samut Prakan, Thailand
+📧 Farmrakpong0@gmail.com
+Tel. 0952952788
+📍 Samut Prakan, Thailand
