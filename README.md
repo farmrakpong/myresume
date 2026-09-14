@@ -75,14 +75,23 @@ Page metadata (title and description) is generated from `profile`, so it updates
 
 ## Deploy
 
-The site is a **static export** (`output: "export"`) published to **GitHub Pages** by [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). Every push to `main` rebuilds and redeploys it — no server required.
+The site is a **static export** (`output: "export"`), so GitHub Pages can serve it with no Node server. The build reads `NEXT_PUBLIC_BASE_PATH` to prefix assets for a project page (`/myresume`), while local `next dev` keeps serving from `/`.
 
-To set this up on a fork:
+There are two ways to publish it:
 
-1. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
-2. Push to `main`. The workflow reads the site path from `actions/configure-pages` and hands it to the build as `NEXT_PUBLIC_BASE_PATH`, so a project page such as `/myresume` gets the correct asset prefix automatically.
+**1. `npm run deploy` — no GitHub Actions needed**
 
-Build the same export locally:
+```bash
+npm run deploy
+```
+
+Builds the export and force-pushes `./out` to the `gh-pages` branch as a single commit. Set **Settings → Pages → Source: Deploy from a branch → `gh-pages` / (root)** once, and every later `npm run deploy` updates the live site.
+
+**2. `.github/workflows/deploy.yml` — automatic on every push**
+
+Push to `main` and the workflow builds and deploys. It takes the site path from `actions/configure-pages`, so the base path is derived rather than hardcoded. Requires **Settings → Pages → Source: GitHub Actions** and a working GitHub Actions quota.
+
+Build the export locally without publishing:
 
 ```bash
 NEXT_PUBLIC_BASE_PATH=/myresume npm run build   # output lands in ./out
